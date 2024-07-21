@@ -1,15 +1,10 @@
-FROM python:3.9-slim
+FROM ubuntu:latest
+RUN apt-get update && apt-get install -y fortune-mod cowsay netcat
 
-WORKDIR /app
+COPY wisecow.sh /usr/local/bin/wisecow.sh
 
-COPY . /app
-
-RUN apt-get update && apt-get install -y \
-    cowsay \
-    fortune-mod \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN sudo chmod +x wisecow.sh
+RUN chmod +x /usr/local/bin/wisecow.sh
 
 EXPOSE 4499
-CMD ["./wisecow.sh"]
+
+CMD [ "/usr/local/bin/wisecow.sh" ]
