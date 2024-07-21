@@ -1,3 +1,4 @@
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,6 +17,6 @@ spec:
     spec:
       containers:
       - name: wisecow
-        image: <your-container-registry>/wisecow-app:latest
+        image: skroyal23/wisecow-app:latest
         ports:
         - containerPort: 4499
