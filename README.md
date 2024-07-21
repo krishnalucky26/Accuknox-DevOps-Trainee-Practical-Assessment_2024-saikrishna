@@ -1,129 +1,65 @@
-# Wisecow-application
-Containerisation and Deployment of Wisecow Application on Kubernetes 
-## Dockerization
+Cow wisdom - Accuknox
+Problem Statement - 1
+Title: Containerization and Deployment of Wisecow Application on Kubernetes
+Objective : To containerize and deploy the Wisecow application, hosted in the above-mentioned GitHub repository, on a Kubernetes environment with secure TLS communication. Note: In this deployment we are using local Kubernetes cluster and application will run on localhost.
 
-1. **Clone the repository**: 
-    ```bash
-    git clone https://github.com/nyrahul/wisecow
-    ```
-2. **Write Dockerfile**:
-    ```Dockerfile
-    # Use an official Python runtime as a parent image
-    FROM python:3.9-slim
+Create Docker file
+Create Docker Image
+Deploy container on Kubernetes Environment
+Secure TLS communication
+Getting Started
+To run this project on your local machine, follow these steps:
 
-    # Set the working directory in the container
-    WORKDIR /app
+Installation:
+You can install fortune-mod and cowsay on Debian-based systems like Ubuntu using the following commands:
 
-    # Copy the current directory contents into the container at /app
-    COPY . /app
+sudo apt update
+sudo apt install fortune-mod cowsay -y
+Dockerization
 
-    # Install any needed packages specified in requirements.txt
-    RUN pip install --no-cache-dir -r requirements.txt
+Create docker file with the name Dockerfile , navigate to the path of file and execute.
 
-    # Make port 4499 available to the world outside this container
-    EXPOSE 4499
+Build the Dockerfile using below command.
 
-    # Define environment variable
-    ENV NAME Wisecow
+docker build -t wisecow-image .
+Docker Images
 
-    # Run app.py when the container launches
-    CMD ["python", "app.py"]
-    ```
-3. **Build the Docker image**:
-    ```bash
-    docker build -t wisecow-app .
-    ```
-4. **Test the Docker image locally**:
-    ```bash
-    docker run -p 4499:4499 wisecow-app
-    ```
+Create repository/ container registry to Dockerhub and push the image with proper tag to it.
 
-## Kubernetes Deployment
+docker push _yourRepositoryName_/wisecow_image:latest
+Dockerization
 
-1. **Create Deployment YAML (`wisecow-deployment.yaml`)**:
-    ```yaml
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: wisecow-deployment
-      labels:
-        app: wisecow
-    spec:
-      replicas: 1
-      selector:
-        matchLabels:
-          app: wisecow
-      template:
-        metadata:
-          labels:
-            app: wisecow
-        spec:
-          containers:
-          - name: wisecow
-            image: <your-container-registry>/wisecow-app:latest
-            ports:
-            - containerPort: 4499
-    ```
-2. **Create Service YAML (`wisecow-service.yaml`)**:
-    ```yaml
-    apiVersion: v1
-    kind: Service
-    metadata:
-      name: wisecow-service
-    spec:
-      selector:
-        app: wisecow
-      ports:
-      - protocol: TCP
-        port: 4499
-        targetPort: 4499
-      type: LoadBalancer
-    ```
-3. **Apply the manifest files**:
-    ```bash
-    kubectl apply -f wisecow-deployment.yaml
-    kubectl apply -f wisecow-service.yaml
-    ```
+Kubernetes Deployment :
 
-## Continuous Integration and Deployment (CI/CD)
+Create Kubernetes deployment manifest files for deploying the Wisecow application in a Kubernetes environment. ex : deployment_manifests_kubernetes.yaml
+Create service file exposed as a Kubernetes service for accessibility. ex : service_manifests_kubernetes.yaml
+Apply the deployment and service using following commands.
+kubectl apply -f wisecow-app-deployment.yaml
+kubectl apply -f wisecow-app-service.yaml
+Check deployments and services running.Use commands.
+kubectl get deployments
+kubectl get services
+Kubernete  Service Deployment
 
-1. **GitHub Actions Workflow**:
-   - Create `.github/workflows/ci-cd.yml`:
-     ```yaml
-     name: CI/CD Pipeline
+Continuous Integration And Deployment 1.Github workflow for a. Create yaml file in ./github/workflows b. Set the secrets secrets.DOCKER_USERNAME and secrets.DOCKER_PASSWORD with your Dockerhub username and docker image name.
 
-     on:
-       push:
-         branches:
-           - main
+workflow
 
-     jobs:
-       build-and-deploy:
-         runs-on: ubuntu-latest
-         steps:
-         - name: Checkout code
-           uses: actions/checkout@v2
-         - name: Login to Container Registry
-           uses: docker/login-action@v1
-           with:
-             username: ${{ secrets.REGISTRY_USERNAME }}
-             password: ${{ secrets.REGISTRY_PASSWORD }}
-         - name: Build Docker image
-           run: docker build -t <your-container-registry>/wisecow-app:latest .
-         - name: Push Docker image
-           run: docker push <your-container-registry>/wisecow-app:latest
-         - name: Deploy to Kubernetes
-           run: kubectl apply -f wisecow-deployment.yaml
-           env:
-             KUBECONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
-     ```
-   - Configure Docker and Kubernetes secrets in the GitHub repository settings.
+TLS Implementaion
 
-## TLS Implementation
+Install OpenSSL.
+sudo apt-get install openssl  
+openssl
 
-1. **Generate TLS Certificates**:
-   - Use tools like Let's Encrypt to generate certificates.
-2. **Configure TLS in Kubernetes Ingress**:
-   - Create an Ingress resource for TLS termination.
-   - Update `wisecow-service.yaml` to use NodePort or ClusterIP type.
-   - Configure Ingress rules for secure communication.
+Generate Private Key.
+openssl genrsa -out server.key 2048
+Generate Certificate Signing Request (CSR)
+openssl req -new -key server.key -out server.csr
+Self-Sign Certificate
+openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+Certificate
+
+Deploy to Kubernetes. Reference this TLS secret in Kubernetes deployment configuration to enable TLS
+kubectl create secret tls tls-secret --cert=server.crt --key=server.key
+Output WisecowRun
+Feel free to customize this README to provide more specific information about your project. Include any additional setup instructions, prerequisites, or specific details about your application that you think would be helpful for users.
