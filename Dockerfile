@@ -3,7 +3,7 @@ RUN apt-get update && apt-get install -y fortune-mod cowsay
 
 COPY wisecow.sh /usr/local/bin/wisecow.sh
 
-RUN chmod +x /usr/local/bin/wisecow.sh
+RUN sudo chmod +x /usr/local/bin/wisecow.sh
 
 EXPOSE 4499
 
