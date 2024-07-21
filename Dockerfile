@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     fortune-mod \
     && rm -rf /var/lib/apt/lists/*
 
-RUN chmod +x wisecow.sh
+RUN sudo chmod +x wisecow.sh
 
 EXPOSE 4499
 CMD ["./wisecow.sh"]
