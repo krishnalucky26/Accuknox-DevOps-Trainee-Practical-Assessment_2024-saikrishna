@@ -17,9 +17,9 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - name: Build Docker image
-      run: docker build -t <skroyal23>/wisecow-app:latest .
+      run: docker build -t <skroyal23 / wisecow-app>/wisecow-app:latest .
     - name: Push Docker image
-      run: docker push <skroyal23>/wisecow-app:latest
+      run: docker push <skroyal23 / wisecow-app>/wisecow-app:latest
     - name: Deploy to Kubernetes
       run: kubectl apply -f wisecow-deployment.yaml
       env:
