@@ -20,8 +20,8 @@ Containerisation and Deployment of Wisecow Application on Kubernetes
     # Install any needed packages specified in requirements.txt
     RUN pip install --no-cache-dir -r requirements.txt
 
-    # Make port 80 available to the world outside this container
-    EXPOSE 80
+    # Make port 4499 available to the world outside this container
+    EXPOSE 4499
 
     # Define environment variable
     ENV NAME Wisecow
@@ -35,7 +35,7 @@ Containerisation and Deployment of Wisecow Application on Kubernetes
     ```
 4. **Test the Docker image locally**:
     ```bash
-    docker run -p 8080:80 wisecow-app
+    docker run -p 4499:4499 wisecow-app
     ```
 
 ## Kubernetes Deployment
@@ -62,7 +62,7 @@ Containerisation and Deployment of Wisecow Application on Kubernetes
           - name: wisecow
             image: <your-container-registry>/wisecow-app:latest
             ports:
-            - containerPort: 80
+            - containerPort: 4499
     ```
 2. **Create Service YAML (`wisecow-service.yaml`)**:
     ```yaml
@@ -75,8 +75,8 @@ Containerisation and Deployment of Wisecow Application on Kubernetes
         app: wisecow
       ports:
       - protocol: TCP
-        port: 80
-        targetPort: 80
+        port: 4499
+        targetPort: 4499
       type: LoadBalancer
     ```
 3. **Apply the manifest files**:
